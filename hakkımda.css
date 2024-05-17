@@ -1,0 +1,59 @@
+* {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.short-hr {
+  height: 2px; /* Yatay çizginin istediğiniz yüksekliğini burada belirtebilirsiniz */
+  margin: 10px 0; /* Opsiyonel: Yatay çizginin üst ve alt boşluklarını ayarlayabilirsiniz */
+}
+h1{
+  text-align: center;
+}
+.custom-container {
+  position: relative; /* Resmin üzerine metin eklemek için konumlandırma tipini belirliyoruz */
+  border: 2px solid transparent;
+  padding: 10px;
+  text-align: center;
+}
+
+.custom-container h1 {
+  margin-bottom: 10px; /* Başlık ile resim arasına boşluk eklemek için */
+}
+
+
+.custom-container img {
+  width: 100%; /* Resmin genişliği */
+  height: 100px; /* Otomatik yükseklik */
+}
+
+
+.custom-container .overlay {
+  position: absolute; /* Metni resmin üzerine yerleştirmek için konumlandırma tipini belirliyoruz */
+  top: 50%; /* Yatayda ortalama işlemi */
+  left: 50%; /* Dikeyde ortalama işlemi */
+  transform: translate(-50%, -50%); /* Metnin ortalanması */
+  z-index: 1; /* Metnin resmin üzerine gelmesini sağlıyoruz */
+  color: white; /* Metin rengi */
+  font-size: 24px; /* Metin boyutu */
+  font-weight: bold; /* Metin kalınlığı */
+}
+
+.rounded-circle-container {
+  text-align: center; /* Resimleri yatayda merkezlemek için */
+}
+
+.rounded-circle-container img {
+  border-radius: 50%; /* Resimleri yuvarlak yapmak için */
+  margin-bottom: 20px; /* Resimlerin altında boşluk bırakmak için */
+}
+.fixed-size-image {
+  
+  height: auto; /* Otomatik yükseklik */
+  max-width: 300px; /* Maksimum genişlik */
+  max-height: 300px; /* Maksimum yükseklik */
+}
+
+
+
