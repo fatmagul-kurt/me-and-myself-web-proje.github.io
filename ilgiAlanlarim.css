@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*{margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: url(resimler/arka-fon.jpg);
+    background-size: 100% 100%;
+    background-attachment: fixed; /* Arka plan resminin sabit kalması için */
+}
+
+
+
+
+
+.navbar a {
+  color: #212529 !important; /* Navbar link color */
+}
+
+
+
+.form-label, .form-select, .btn {
+  color: white !important; /* Form label, select and button text color */
+}
+
+.form-control {
+  background-color: transparent !important; /* Form control background color */
+  color: white !important; /* Form control text color */
+  border-color: white !important; /* Form control border color */
+}
+
+.card {
+  background-color: #212529; /* Card background color */
+  border-color: #343a40; /* Card border color */
+}
+
+.card-title {
+  color: white; /* Card title color */
+}
+
+.card-body {
+  border-color: #343a40; /* Card body border color */
+}
+
+.btn-primary {
+  background-color: transparent !important; /* Primary button background color */
+  color: white !important; /* Primary button text color */
+  border-color: white !important; /* Primary button border color */
+}
+
+.btn-primary:hover {
+  background-color: #007bff !important; /* Primary button hover background color */
+  border-color: #007bff !important; /* Primary button hover border color */
+}
+
+#results {
+  color: black; /* Results text color */
+}
