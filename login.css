@@ -148,5 +148,9 @@ text-decoration: underline;
 .login-register p a:hover{
     text-decoration: underline;
 }
-
+.footer {
+    margin-top: 50px;
+    text-align: center;
+    color: #162938;
+  }
 
