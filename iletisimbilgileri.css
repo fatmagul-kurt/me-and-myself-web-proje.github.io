@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+body {
+    background: url('resimler/vincent-van-gogh-seascape-near-les-sai-d75772.jpg');
+    background-size: cover; /* Arka plan resmini tam olarak kapsar */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh; /* Viewport yüksekliği */
+    display: flex;
+    flex-direction: column;
+}
+nav {
+    flex-shrink: 0; /* Navbar'ın boyutunun sabit kalmasını sağlar */
+}
+.content {
+    flex: 1; /* İçeriğin kalan alanı kaplamasını sağlar */
+    display: flex;
+    justify-content: center; /* Yatayda ortalar */
+    align-items: center; /* Dikeyde ortalar */
+}
+.container {
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    text-align: center; /* Metni ortalar */
+    max-width: 600px; /* Konteyner için maksimum genişlik */
+    width: 100%; /* Konteynerin maksimum genişliğe kadar tam genişlikte olmasını sağlar */
+    margin: 0 20px; /* Küçük cihazlarda ekran kenarlarına değmemesi için yanlara boşluk ekler */
+}
+p {
+    margin: 10px 0; /* Paragraflar arasında daha iyi aralık için boşluk ekler */
+}
