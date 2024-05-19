@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+*{margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(resimler/deniyoruz.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+
+        .container {
+            text-align: center;
+            color: rgb(239, 240, 244);
+            text-shadow: 1px 1px 1px black;
+        }
+
+        #logoutButton {
+            background-color: rgba(0, 0, 0, 0.2); /* Set a transparent background */
+            color: #fff; /* Set text color */
+            border: none;
+            padding: 10px 20px; /* Adjust padding */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        #logoutButton:hover {
+            background-color: rgba(0, 0, 0, 0.4); /* Darken the button on hover */
+        }

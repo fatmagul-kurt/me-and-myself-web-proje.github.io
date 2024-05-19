@@ -17,6 +17,7 @@
 
 
 
+
 .container {
   max-width: 1200px;
   width: 95%;
@@ -148,6 +149,9 @@
   }
 }
 
+
+
+
   .kutu{
     background-color: rgba(2, 69, 114, 0.4);
     padding: 3%;
@@ -161,7 +165,7 @@
     font-size: 20ps;
   }
 .card-body{
-  background-color: rgba(2, 69, 114, 0.5);
+  background-color: rgba(2, 69, 114, 0.4);
   background-image: none;
 }
 .btn {
@@ -170,4 +174,9 @@
   align-items: center;
   width: 100%;
   height: 100%;
+}
+.footer {
+  margin-top: 50px;
+  text-align: center;
+  color: #ffffff;
 }

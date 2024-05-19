@@ -34,7 +34,6 @@ const initSlider = () => {
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
     });
-
     // Slide images according to the slide button clicks
     slideButtons.forEach(button => {
         button.addEventListener("click", () => {
