@@ -3,59 +3,42 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: url(resimler/arka-fon.jpg);
-    background-size: 100% 100%;
-    background-attachment: fixed; /* Arka plan resminin sabit kalması için */
+  background: url('resimler/arka-fon.jpg') no-repeat center center fixed;
+  background-size: cover;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
-
-
-
-
-
-.navbar a {
-  color: #212529 !important; /* Navbar link color */
-}
-
-
-
-.form-label, .form-select, .btn {
-  color: white !important; /* Form label, select and button text color */
-}
-
-.form-control {
-  background-color: transparent !important; /* Form control background color */
-  color: white !important; /* Form control text color */
-  border-color: white !important; /* Form control border color */
-}
-
 .card {
-  background-color: #212529; /* Card background color */
-  border-color: #343a40; /* Card border color */
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  height: 100%;
 }
-
+.card:hover {
+  transform: scale(1.05);
+}
+.card-img-top {
+  width: 100%;
+  height: auto; /* Adjust the height as needed */
+  object-fit: cover;
+}
 .card-title {
-  color: white; /* Card title color */
+  margin-top: 10px;
+  font-size: 18px;
 }
-
 .card-body {
-  border-color: #343a40; /* Card body border color */
+  padding: 20px;
 }
-
-.btn-primary {
-  background-color: transparent !important; /* Primary button background color */
-  color: white !important; /* Primary button text color */
-  border-color: white !important; /* Primary button border color */
+.card-audio {
+  width: 100%;
+  margin-top: 10px;
 }
-
-.btn-primary:hover {
-  background-color: #007bff !important; /* Primary button hover background color */
-  border-color: #007bff !important; /* Primary button hover border color */
-}
-
-#results {
-  color: black; /* Results text color */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
 }

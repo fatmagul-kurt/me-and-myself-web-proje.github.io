@@ -43,180 +43,179 @@
 
  
 <div class="container mt-5">
-  <h1 class="text-center mb-4" style="color: transparent; text-shadow: 0 0 2px black;">Anime ve Şarkı Arama</h1>
-
-
+  <h1 class="text-center mb-4" style="color: transparent; text-shadow: 0 0 2px black;">Anime ve Spotify Arama</h1>
   <form id="searchForm">
       <div class="mb-3">
           <label for="searchTitle" class="form-label" style="color: white;">Arama Başlığı:</label>
-          <input type="text" class="form-control" id="searchTitle" style="background-color: transparent; color: white; border-color: white;" required>
+          <input type="text" class="form-control" id="searchTitle" style="background-color: transparent; border-color: white;" required>
       </div>
       <div class="mb-3">
           <label for="searchType" class="form-label" style="color: white;">Arama Türü:</label>
-          <select class="form-select" id="searchType" style="background-color: transparent;  border-color: white;" required>
-              <option value="anime" style="background-color: transparent" >Anime</option>
+          <select class="form-select" id="searchType" style="background-color: transparent" required>
+              <option value="anime" style="background-color: transparent">Anime</option>
               <option value="spotify" style="background-color: transparent">Spotify</option>
           </select>
       </div>
-      <button type="submit" class="btn btn-primary" style="background-color: transparent; color: white; border-color: white;">Ara</button>
+      <button type="submit" class="btn btn-primary" style="background-color: transparent">Ara</button>
   </form>
   <div id="results" class="row mt-4"></div>
+  <footer>
+      <p>&copy; 2024 Fatmagül Kurt</p>
+  </footer>
 </div>
 
-  
-  <!-- Combined API Script -->
-  <script>
-      // Anime API endpoint for searching anime titles
-      const animeAPIEndpoint = 'https://api.jikan.moe/v4/anime?q=';
+<script>
+  const animeAPIEndpoint = 'https://api.jikan.moe/v4/anime?q=';
+  const spotifyClientId = '53b47957475249cabbec65f38406c2cc';
+  const spotifyClientSecret = '1c440473e0f44cba9fa769e21e833c12';
+  let spotifyAccessToken = '';
 
-      // Spotify API endpoint for searching tracks (requires authorization)
-      const spotifyAPIEndpoint = 'https://api.spotify.com/v1/search?type=track&q=';
+  async function fetchSpotifyToken() {
+      const urlencoded = new URLSearchParams();
+      urlencoded.append("grant_type", "client_credentials");
+      urlencoded.append("client_id", spotifyClientId);
+      urlencoded.append("client_secret", spotifyClientSecret);
 
-      // Function to get the access token from the URL hash
-      function getAccessToken() {
-          const hash = window.location.hash.substring(1);
-          const params = new URLSearchParams(hash);
-          return params.get('access_token');
+      const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: urlencoded,
+          redirect: "follow"
+      };
+
+      try {
+          const response = await fetch("https://accounts.spotify.com/api/token", requestOptions);
+          const data = await response.json();
+          spotifyAccessToken = data.access_token;
+      } catch (error) {
+          console.error('Error fetching Spotify token:', error);
+      }
+  }
+
+  async function searchAnime(animeTitle) {
+      try {
+          const response = await fetch(animeAPIEndpoint + encodeURIComponent(animeTitle));
+          const data = await response.json();
+          displayResults(data.data, 'anime');
+          scrollToTop();
+      } catch (error) {
+          console.error('Error fetching anime:', error);
+          displayError('Anime arama sırasında bir hata oluştu: ' + error.message);
+      }
+  }
+
+  async function searchSpotify(trackId) {
+      if (!spotifyAccessToken) {
+          await fetchSpotifyToken();
       }
 
-      // Function to search for anime titles
-      function searchAnime(animeTitle) {
-          fetch(animeAPIEndpoint + encodeURIComponent(animeTitle))
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok ' + response.statusText);
+      const spotifyAPIEndpoint = `https://api.spotify.com/v1/tracks/${encodeURIComponent(trackId)}`;
+
+      const requestOptions = {
+          method: "GET",
+          headers: { "Authorization": "Bearer " + spotifyAccessToken },
+          redirect: "follow"
+      };
+
+      try {
+          const response = await fetch(spotifyAPIEndpoint, requestOptions);
+          const data = await response.json();
+          return data;
+      } catch (error) {
+          console.error('Error fetching Spotify track:', error);
+          displayError('Spotify arama sırasında bir hata oluştu: ' + error.message);
+      }
+  }
+
+  function displayResults(items, type) {
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = ''; 
+
+      if (items.length > 0) {
+          items.forEach(item => {
+              const col = document.createElement('div');
+              col.classList.add('col-md-4', 'mb-4');
+
+              const card = document.createElement('div');
+              card.classList.add('card');
+
+              const cardLink = document.createElement('a');
+              cardLink.href = type === 'anime' ? item.url : item.external_urls.spotify;
+              cardLink.target = '_blank';
+
+              const cardImage = document.createElement('img');
+              cardImage.src = type === 'anime' ? item.images.jpg.image_url : item.album.images[0].url;
+              cardImage.alt = item.title || item.name;
+              cardImage.classList.add('card-img-top');
+
+              const cardBody = document.createElement('div');
+              cardBody.classList.add('card-body');
+
+              const cardTitle = document.createElement('h5');
+              cardTitle.classList.add('card-title');
+              cardTitle.textContent = item.title || item.name;
+
+              cardBody.appendChild(cardTitle);
+
+              if (type === 'spotify') {
+                  const cardAudio = document.createElement('audio');
+                  cardAudio.classList.add('card-audio');
+                  cardAudio.controls = true;
+
+                  const audioSource = document.createElement('source');
+                  audioSource.src = item.preview_url;
+                  audioSource.type = 'audio/mpeg';
+
+                  cardAudio.appendChild(audioSource);
+                  cardBody.appendChild(cardAudio);
               }
-              return response.json();
-          })
-          .then(data => {
-              // Display anime titles and images on the page
-              const resultsContainer = document.getElementById('results');
-              resultsContainer.innerHTML = ''; // Clear previous results
-              if (data.data && data.data.length > 0) {
-                  data.data.forEach(anime => {
-                      const col = document.createElement('div');
-                      col.classList.add('col-md-4', 'mb-4');
 
-                      const card = document.createElement('div');
-                      card.classList.add('card');
-
-                      const cardLink = document.createElement('a');
-                      cardLink.href = anime.url; // Link to anime detail page
-                      cardLink.target = '_blank'; // Open in new tab
-
-                      const cardImage = document.createElement('img');
-                      cardImage.src = anime.images.jpg.image_url;
-                      cardImage.alt = anime.title;
-                      cardImage.classList.add('card-img-top');
-
-                      const cardBody = document.createElement('div');
-                      cardBody.classList.add('card-body');
-
-                      const cardTitle = document.createElement('h5');
-                      cardTitle.classList.add('card-title');
-                      cardTitle.textContent = anime.title;
-
-                      cardBody.appendChild(cardTitle);
-                      cardLink.appendChild(cardImage);
-                      card.appendChild(cardLink);
-                      card.appendChild(cardBody);
-                      col.appendChild(card);
-                      resultsContainer.appendChild(col);
-                  });
-              } else {
-                  resultsContainer.textContent = 'Sonuç bulunamadı.';
-              }
-          })
-          .catch(error => {
-              console.error('Error fetching anime:', error);
-              const resultsContainer = document.getElementById('results');
-              resultsContainer.innerHTML = 'Anime arama sırasında bir hata oluştu: ' + error.message;
+             
+              cardLink.appendChild(cardImage);
+              card.appendChild(cardLink);
+              card.appendChild(cardBody);
+              col.appendChild(card);
+              resultsContainer.appendChild(col);
           });
+      } else {
+          resultsContainer.textContent = 'Sonuç bulunamadı.';
+      }
+  }
+
+  function displayError(message) {
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = message;
+  }
+
+  function scrollToTop() {
+      window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+      });
+  }
+
+  document.getElementById('searchForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const searchTitle = document.getElementById('searchTitle').value;
+      const searchType = document.getElementById('searchType').value;
+
+      if (searchType === 'anime') {
+          searchAnime(searchTitle);
+      } else if (searchType === 'spotify') {
+          const data = await searchSpotify(searchTitle);
+          if (data) {
+              displayResults([data], 'spotify');
+              scrollToTop();
+          }
       }
 
-      // Function to search for Spotify tracks
-      function searchSpotify(trackTitle) {
-          const accessToken = getAccessToken();
-          if (!accessToken) {
-              alert('Spotify API erişim tokeni eksik. Lütfen yetkilendirme işlemini tamamlayın.');
-              return;
-          }
+      document.getElementById('searchTitle').value = '';
+  });
 
-          fetch(spotifyAPIEndpoint + encodeURIComponent(trackTitle), {
-              headers: {
-                  'Authorization': 'Bearer ' + accessToken
-              }
-          })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok ' + response.statusText);
-              }
-              return response.json();
-          })
-          .then(data => {
-              // Display Spotify tracks on the page
-              const resultsContainer = document.getElementById('results');
-              resultsContainer.innerHTML = ''; // Clear previous results
-              if (data.tracks && data.tracks.items.length > 0) {
-                  data.tracks.items.forEach(track => {
-                      const col = document.createElement('div');
-                      col.classList.add('col-md-4','mb-4');
-
-const card = document.createElement('div');
-card.classList.add('card');
-
-const cardLink = document.createElement('a');
-cardLink.href = track.external_urls.spotify; // Link to Spotify track
-cardLink.target = '_blank'; // Open in new tab
-
-const cardImage = document.createElement('img');
-cardImage.src = track.album.images[0].url;
-cardImage.alt = track.name;
-cardImage.classList.add('card-img-top');
-
-const cardBody = document.createElement('div');
-cardBody.classList.add('card-body');
-
-const cardTitle = document.createElement('h5');
-cardTitle.classList.add('card-title');
-cardTitle.textContent = track.name;
-
-cardBody.appendChild(cardTitle);
-cardLink.appendChild(cardImage);
-card.appendChild(cardLink);
-card.appendChild(cardBody);
-col.appendChild(card);
-resultsContainer.appendChild(col);
-});
-} else {
-resultsContainer.textContent = 'Sonuç bulunamadı.';
-}
-})
-.catch(error => {
-console.error('Error fetching Spotify tracks:', error);
-const resultsContainer = document.getElementById('results');
-resultsContainer.innerHTML = 'Spotify arama sırasında bir hata oluştu: ' + error.message;
-});
-}
-
-// Event listener for form submission
-document.getElementById('searchForm').addEventListener('submit', function(event) {
-event.preventDefault();
-const searchTitle = document.getElementById('searchTitle').value;
-const searchType = document.getElementById('searchType').value;
-
-if (searchType === 'anime') {
-searchAnime(searchTitle);
-} else if (searchType === 'spotify') {
-searchSpotify(searchTitle);
-}
-
-document.getElementById('searchTitle').value = ''; // Clear input field after submission
-});
+  fetchSpotifyToken();
 </script>
 
 <!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>
-
